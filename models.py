@@ -3,9 +3,11 @@ from app import db
 from datetime import datetime
 import re
 
+from flask_security import UserMixin, RoleMixin
 
-ROLE_USER = 0
-ROLE_ADMIN = 1
+
+#ROLE_USER = 0
+#ROLE_ADMIN = 1
 
 def slugify(s):                                             #генерация заголовков
     pattern = r'[^\w+]'
@@ -20,6 +22,7 @@ post_tags = db.Table('post_tags',
                                db.ForeignKey('tag.id'))
                      )
 ####
+'''
 authors_join = db.Table('authors_join',
                      db.Column('post_id',                   #post_it - название колонки
                                db.Integer,
@@ -28,6 +31,7 @@ authors_join = db.Table('authors_join',
                                db.Integer,
                                db.ForeignKey('user.id'))
                      )
+'''
 ####
 
 class Post(db.Model):
@@ -38,9 +42,11 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.now())
    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))       #внешний ключ
     ####
+    '''
     authors = db.relationship('User', secondary=authors_join,
                               backref=db.backref('post',
                                                  lazy='dynamic'))
+    '''
     ####
     tags = db.relationship('Tag', secondary=post_tags,
                            backref= db.backref('post',
@@ -57,20 +63,6 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post id: {}, title: {}>'.format(self.id, self.title)
 
-
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    nickname = db.Column(db.String(64), index = True, unique = True)
-    email = db.Column(db.String(120), index = True, unique = True)
-    role = db.Column(db.SmallInteger, default = ROLE_USER)
-    #posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')#использунтся для связи как один
-
-    def __repr__(self):                                 #используется для отладки(можно видеть с консоли)
-        return '<User {}>'.format(self.nickname)
-
-
-
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(100))
@@ -86,28 +78,32 @@ class Tag(db.Model):
     def generate_slug(self):
         if self.name:
             self.slug = slugify(self.name)
-'''
-def slugify(s):
-    return re.sub('[^\w]+','-',s).lower()
-
-class Entry(db.Model):
-    id = db.Column(db.INTEGER, primary_key=True)
-    title = db.Column(db.String(100))
-    slug = db.Column(db.String(100), unique=True)#уникальный заголовок
-    body = db.Column(db.Text)
-    create_timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
-    modified_timestamp = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
 
 
-    def __init__(self, *args, **kwargs): #устанавливает slug на основе title
-        super(Entry, self).__init__(*args,**kwargs)
-        self.generate_slag
 
-    def generate_slag(self):
-        self.slug = ''
-        if self.title:
-            self.slug = slugify(self.title)
+### Flask security
 
-    def __str__(self):
-        return 'Entry: %s >' %self.title
-'''
+roles_users = db.Table('roles_users',
+                       db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+                       db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
+                       )
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    nickname = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())
+    roles = db.relationship('Role', secondary=roles_users, backref=db.backref('user', lazy='dynamic'))
+
+    #role = db.Column(db.SmallInteger, default = ROLE_USER)
+    #posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')#использунтся для связи как один
+
+    def __repr__(self):                                 #используется для отладки(можно видеть с консоли)
+        return '<User {}>'.format(self.nickname)
+
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True)
+    description = db.Column(db.String(255))
+

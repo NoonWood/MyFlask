@@ -1,6 +1,7 @@
 from flask_wtf.csrf import CSRFProtect
 import os
 
+
 class Configuration():
     DEBUG = True
 
@@ -13,5 +14,9 @@ class Configuration():
     SECRET_KEY = 'Noonan'
     OPENID_PROVIDERS = [
         {'name': 'MyOpenID', 'url': 'https://www.myopenid.com'}]
+
+    ###Flask-security
+    SECURITY_PASSWORD_SALT = 'salt'
+    SECURITY_PASSWORD_HASH = 'sha512_crypt'
 
 
