@@ -43,6 +43,8 @@
 
           {% if current_user.has_role('admin') %}
              <a class="nav-link disabled" href="/admin">Admin</a>
+              {% else %}
+              <a class="nav-link disabled" href="/login">Login</a>
           {% endif %}
 
       </li>

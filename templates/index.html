@@ -9,10 +9,16 @@
 {% endblock %}
 
 {% block content %}
+
         <h1>Hi, User!</h1>
     {% for post in posts %}
         <div><p>{{post.author.nickname}} says: <b>{{post.body}}</b></p></div>
     {% endfor %}
+    <div class="col-md-offset-2 col-md-6">
+    <p>В этом курсовом проекте средствами фреймворка Flask и языка програмирования Python
+    я реализовал web приложение Газеты.</p>
+
+    </div>
 {% endblock %}
 
 

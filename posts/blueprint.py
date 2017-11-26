@@ -70,13 +70,13 @@ def index():
 #TODO slug + id - для полной уникальности
 @posts.route('/<slug>')
 def post_detail(slug):
-    post = Post.query.filter(Post.slug==slug).first()
+    post = Post.query.filter(Post.slug==slug).first_or_404()
     tags = post.tags
     return render_template('posts/post_detail.html', post=post, tags=tags)
 
 @posts.route('/tag/<slug>')
 def tag_detail(slug):
-    tag = Tag.query.filter(Tag.slug==slug).first()
+    tag = Tag.query.filter(Tag.slug==slug).first_or_404()
     posts = tag.post.all()
     return render_template('posts/tag_detail.html', tag=tag, posts=posts)
 
@@ -84,7 +84,7 @@ def tag_detail(slug):
 @posts.route('/<slug>/edit/', methods=['POST','GET'])
 @login_required
 def edit_post(slug):
-    post = Post.query.filter(Post.slug==slug).first()
+    post = Post.query.filter(Post.slug==slug).first_or_404()
 
     if request.method == 'POST':
         form = PostForm(formdata=request.form, obj=post)

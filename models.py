@@ -40,8 +40,6 @@ class Post(db.Model):
     slug = db.Column(db.String(140), unique=True)
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.now())
-   # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))       #внешний ключ
-    ####
     '''
     authors = db.relationship('User', secondary=authors_join,
                               backref=db.backref('post',
@@ -68,6 +66,10 @@ class Tag(db.Model):
     name = db.Column(db.String(100))
     slug = db.Column(db.String(100))
 
+    posts = db.relationship('Post', secondary=post_tags,
+                           backref=db.backref('tag',
+                                              lazy='dynamic'))
+
     def __init__(self,*args,**kwargs):
         super(Tag, self).__init__(*args,**kwargs)
         self.generate_slug()
@@ -82,7 +84,6 @@ class Tag(db.Model):
 
 
 ### Flask security
-
 roles_users = db.Table('roles_users',
                        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
                        db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
@@ -95,9 +96,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('user', lazy='dynamic'))
-
-    #role = db.Column(db.SmallInteger, default = ROLE_USER)
-    #posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')#использунтся для связи как один
 
     def __repr__(self):                                 #используется для отладки(можно видеть с консоли)
         return '<User {}>'.format(self.nickname)
