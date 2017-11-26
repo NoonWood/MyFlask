@@ -36,12 +36,15 @@
       <li class="nav-item active">
         <a class="nav-link" href="{{ url_for('index') }}">Home <span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-      </li>
+
 
       <li class="nav-item">
-        <a class="nav-link disabled" href="{{ url_for('posts.create_post') }}">Create</a>
+        <!--<a class="nav-link disabled" href="{ url_for('posts.create_post') }}">Create</a> -->
+
+          {% if current_user.has_role('admin') %}
+             <a class="nav-link disabled" href="/admin">Admin</a>
+          {% endif %}
+
       </li>
     </ul>
 

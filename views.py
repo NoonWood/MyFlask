@@ -1,11 +1,12 @@
 from flask import render_template, flash, redirect
 from app import app
-from forms import LoginForm
+#from forms import LoginForm
 
 @app.route('/')
 def homepage():
     return render_template("index.html")
 
+'''
 #Мы импортировали наш класс LoginForm, создали его экземпляр и отправили в шаблон.
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -17,7 +18,7 @@ def login():
                            title = 'Sign In',
                            form = form,
                            providers = app.config['OPENID_PROVIDERS'])
-
+'''
 
 
 @app.route('/index')
