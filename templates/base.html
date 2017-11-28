@@ -41,13 +41,20 @@
       <li class="nav-item">
         <!--<a class="nav-link disabled" href="{ url_for('posts.create_post') }}">Create</a> -->
 
-          {% if current_user.has_role('admin') %}
-             <a class="nav-link disabled" href="/admin">Admin</a>
-              {% else %}
-              <a class="nav-link disabled" href="/login">Login</a>
-          {% endif %}
 
       </li>
+        <li class="nav-item">
+                  {% if current_user.has_role('author') %}
+                      <a class="nav-link disabled" href="{{ url_for('posts.create_post') }}">Create article</a>
+                      {% elif current_user.has_role('admin')%}
+                      <a class="nav-link disabled" href="/admin">Admin</a>
+                      {% else %}
+                      <a class="nav-link disabled" href="/register">Registration</a>
+
+                  {% endif %}
+        </li>
+
+
     </ul>
 
     <form class="form-inline my-2 my-lg-0" method="GET">
@@ -62,15 +69,15 @@
     <div class="plain">
     {% block content_title %}
         <h2>
-                            {% with messages = get_flashed_messages() %}
-                                {% if messages %}
-                                    <ul>
-                                        {% for message in messages %}
-                                            <li>{{ message }} </li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            {% endwith %}
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }} </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
         </h2>
     {% endblock %}
     </div>

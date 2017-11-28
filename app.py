@@ -18,7 +18,6 @@ from flask_security import current_user
 from flask import redirect, request, url_for
 
 
-
 app = Flask(__name__)
 app.config.from_object(Configuration)
 db = SQLAlchemy(app)
@@ -27,6 +26,9 @@ db = SQLAlchemy(app)
 migrate = Migrate(app,db)
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
+#
+
+
 
         #Admin#
 from models import *

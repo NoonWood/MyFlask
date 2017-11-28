@@ -19,4 +19,8 @@ class Configuration():
     SECURITY_PASSWORD_SALT = 'salt'
     SECURITY_PASSWORD_HASH = 'sha512_crypt'
 
+    SECURITY_REGISTERABLE = True
+    #SECURITY_REGISTER_URL = '/create_account'
+    SECURITY_SEND_LOGIN_TEMPLATE = '/index'
+
 

@@ -10,6 +10,8 @@ def homepage():
 def page_not_found(e):
     return render_template('404.html'), 404
 
+
+
 @app.route('/index')
 def index():
     user = {'nickname': 'User'}
@@ -24,3 +26,8 @@ def index():
                            title = "Home",
                            user = user,
                            posts = posts)
+
+
+@app.route('/register', methods=['GET'])
+def register():
+    return render_template('security/register_user.html')
