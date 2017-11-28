@@ -22,7 +22,7 @@ post_tags = db.Table('post_tags',
                                db.ForeignKey('tag.id'))
                      )
 ####
-'''
+
 authors_join = db.Table('authors_join',
                      db.Column('post_id',                   #post_it - название колонки
                                db.Integer,
@@ -31,7 +31,7 @@ authors_join = db.Table('authors_join',
                                db.Integer,
                                db.ForeignKey('user.id'))
                      )
-'''
+
 ####
 
 class Post(db.Model):
@@ -40,11 +40,11 @@ class Post(db.Model):
     slug = db.Column(db.String(140), unique=True)
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.now())
-    '''
+
     authors = db.relationship('User', secondary=authors_join,
                               backref=db.backref('post',
                                                  lazy='dynamic'))
-    '''
+
     ####
     tags = db.relationship('Tag', secondary=post_tags,
                            backref= db.backref('post',
@@ -95,6 +95,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
+    articles = db.relationship('Post', secondary=authors_join, backref=db.backref('user', lazy='dynamic'))
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('user', lazy='dynamic'))
 
     def __repr__(self):                                 #используется для отладки(можно видеть с консоли)
@@ -102,6 +103,6 @@ class User(db.Model, UserMixin):
 
 class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True)
+    name = db.Column(db.String(100), unique=False)
     description = db.Column(db.String(255))
 

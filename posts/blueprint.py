@@ -81,6 +81,7 @@ def tag_detail(slug):
     return render_template('posts/tag_detail.html', tag=tag, posts=posts)
 
 
+
 @posts.route('/<slug>/edit/', methods=['POST','GET'])
 @login_required
 def edit_post(slug):

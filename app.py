@@ -17,6 +17,8 @@ from flask_security import current_user
 
 from flask import redirect, request, url_for
 
+from flask_security.forms import RegisterForm
+from wtforms import StringField
 
 app = Flask(__name__)
 app.config.from_object(Configuration)
@@ -66,5 +68,10 @@ admin.add_view(TagAdminView(Tag, db.session))
 
 ###Flask security
 
+class ExtendedRegisterForm(RegisterForm):
+    nickname = StringField('Nickname', [])
+
+
+
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore)
+security = Security(app, user_datastore, register_form=ExtendedRegisterForm)

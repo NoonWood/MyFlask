@@ -12,6 +12,7 @@
     <h1>{{ _('Register') }}</h1>
     <form action="{{ url_for_security('register') }}" method="POST" name="register_user_form">
     {{ register_user_form.hidden_tag() }}
+    {{ render_field_with_errors(register_user_form.nickname, class='form-control') }}
     {{ render_field_with_errors(register_user_form.email, class='form-control') }}
     {{ render_field_with_errors(register_user_form.password, class='form-control') }}
     {% if register_user_form.password_confirm %}
