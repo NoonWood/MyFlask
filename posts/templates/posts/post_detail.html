@@ -23,6 +23,8 @@
     {{ post.body }}
     </div>
     {% for author in post.authors %}
-        <span>{{ author.nickname }}</span>
+        <a href="{{ url_for('posts.author_detail', id=author.id) }}">
+            <span class="badge badge-light">{{ author.nickname }}</span>
+        </a>
     {% endfor %}
 {% endblock %}
