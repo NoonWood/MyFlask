@@ -41,7 +41,7 @@ class Post(db.Model):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.now())
 
-    authors = db.relationship('User', secondary=authors_join,
+    authors = db.relationship('User', secondary=authors_join, lazy='joined',
                               backref=db.backref('post',
                                                  lazy='dynamic'))
 
@@ -86,7 +86,7 @@ class Tag(db.Model):
 ### Flask security
 roles_users = db.Table('roles_users',
                        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-                       db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
+                       db.Column('role_id', db.Integer(), db.ForeignKey('role.id'), default= 2)
                        )
 
 class User(db.Model, UserMixin):
@@ -95,7 +95,9 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
-    articles = db.relationship('Post', secondary=authors_join, backref=db.backref('user', lazy='dynamic'))
+
+    articles = db.relationship('Post', lazy=True, secondary=authors_join, backref=db.backref('authrs', lazy='dynamic'))
+
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('user', lazy='dynamic'))
 
     def __repr__(self):                                 #используется для отладки(можно видеть с консоли)

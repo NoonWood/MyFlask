@@ -21,6 +21,6 @@ class Configuration():
 
     SECURITY_REGISTERABLE = True
     #SECURITY_REGISTER_URL = '/create_account'
-    SECURITY_SEND_LOGIN_TEMPLATE = '/index'
-
+    SECURITY_SEND_LOGIN_TEMPLATE = '/login'
+    SECURITY_SEND_CONFIRMATION_TEMPLATE = '/login'
 

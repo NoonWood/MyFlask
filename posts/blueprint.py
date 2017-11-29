@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import render_template
-from models import Post, Tag
+from flask_login import current_user
+from models import Post, Tag, User
 
 from flask import request
 from .forms import PostForm
@@ -22,6 +23,7 @@ def create_post():
         #tags = request.form['tags']
         try:
             post = Post(title=title, body=body)
+            post.authors.append(current_user)
             #tag = Tag(name=tags)
             #db.session.add(tag)
             #db.session.commit()
@@ -80,13 +82,18 @@ def tag_detail(slug):
     posts = tag.post.all()
     return render_template('posts/tag_detail.html', tag=tag, posts=posts)
 
+@posts.route('/author/posts/<id>')
+def author_detail(id):
+    posts = Post.query.join(User.articles).filter(User.id == id)
+    author = User.query.get(id)
+    return render_template('posts/authors_detail.html', posts=posts, author=author)
 
 
 @posts.route('/<slug>/edit/', methods=['POST','GET'])
 @login_required
 def edit_post(slug):
     post = Post.query.filter(Post.slug==slug).first_or_404()
-
+    print(post.authrs)
     if request.method == 'POST':
         form = PostForm(formdata=request.form, obj=post)
         form.populate_obj(post)
