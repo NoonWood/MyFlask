@@ -85,6 +85,7 @@ def tag_detail(slug):
 @posts.route('/author/posts/<id>')
 def author_detail(id):
     posts = Post.query.join(User.articles).filter(User.id == id)
+    print(posts)
     author = User.query.get(id)
     return render_template('posts/authors_detail.html', posts=posts, author=author)
 

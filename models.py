@@ -96,7 +96,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
 
-    articles = db.relationship('Post', lazy=True, secondary=authors_join, backref=db.backref('authrs', lazy='dynamic'))
+    articles = db.relationship('Post', lazy=True, secondary=authors_join, backref=db.backref('author', lazy='dynamic'))
 
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('user', lazy='dynamic'))
 
@@ -107,4 +107,6 @@ class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=False)
     description = db.Column(db.String(255))
+    def __repr__(self):
+        return 'Role {0}'.format(self.name)
 

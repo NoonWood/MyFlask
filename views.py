@@ -27,7 +27,8 @@ def index():
                            user = user,
                            posts = posts)
 
-
+'''
 @app.route('/register', methods=['GET'])
 def register():
     return render_template('security/register_user.html')
+'''

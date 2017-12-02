@@ -60,11 +60,13 @@ class PostAdminView(AdminMixin, BaseModelView):
 class TagAdminView(AdminMixin, BaseModelView):
     form_columns = ['name','posts']
 
+class UserAdminView(AdminMixin, ModelView):
+    form_columns = ['nickname','roles']
 
 admin = Admin(app, 'AdminApp', url='/', index_view=HomeAdminView('Home'))
 admin.add_view(PostAdminView(Post, db.session))
 admin.add_view(TagAdminView(Tag, db.session))
-# admin.add_view(UserAdminView(User, db.session))
+admin.add_view(UserAdminView(User, db.session))
 
 ###Flask security
 
