@@ -62,8 +62,10 @@ def index():
 
     if q:
         posts = Post.query.filter(Post.title.contains(q) | Post.body.contains(q)) #.all()
+        print(posts)
     else:
         posts = Post.query.order_by(Post.timestamp.desc())
+        print(posts)
 
     pages = posts.paginate(page=page, per_page=5)
     return render_template('posts/index.html', posts=posts, pages=pages)
@@ -79,12 +81,12 @@ def post_detail(slug):
 @posts.route('/tag/<slug>')
 def tag_detail(slug):
     tag = Tag.query.filter(Tag.slug==slug).first_or_404()
-    posts = tag.post.all()
+    posts = tag.posts.all()
     return render_template('posts/tag_detail.html', tag=tag, posts=posts)
 
 @posts.route('/author/posts/<id>')
 def author_detail(id):
-    posts = Post.query.join(User.articles).filter(User.id == id)
+    posts = Post.query.join(User.posts).filter(User.id == id)
     print(posts)
     author = User.query.get(id)
     return render_template('posts/authors_detail.html', posts=posts, author=author)

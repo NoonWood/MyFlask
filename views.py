@@ -21,7 +21,6 @@ def index():
             'body':'Welcome for my kurs project !'
         }
     ]
-
     return render_template("index.html",
                            title = "Home",
                            user = user,
