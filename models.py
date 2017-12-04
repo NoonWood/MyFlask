@@ -4,7 +4,8 @@ from datetime import datetime
 import re
 
 from flask_security import UserMixin, RoleMixin
-
+from sqlalchemy import event
+from sqlalchemy.orm import *
 
 #ROLE_USER = 0
 #ROLE_ADMIN = 1
@@ -39,15 +40,16 @@ class Post(db.Model):
     title = db.Column(db.String(140))
     slug = db.Column(db.String(140), unique=True)
     body = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, default=datetime.now())
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     authors = db.relationship('User', secondary=authors_join, lazy='joined',
-                              backref=db.backref('post',
+                              backref=db.backref('posts',
                                                  lazy='dynamic'))
+
 
     ####
     tags = db.relationship('Tag', secondary=post_tags,
-                           backref= db.backref('post',
+                           backref= db.backref('posts',
                                                lazy='dynamic'))#определяем тип возвразаемых данных
 
     def __init__(self, *args, **kwargs):
@@ -66,9 +68,9 @@ class Tag(db.Model):
     name = db.Column(db.String(100))
     slug = db.Column(db.String(100))
 
-    posts = db.relationship('Post', secondary=post_tags,
-                           backref=db.backref('tag',
-                                              lazy='dynamic'))
+    # posts = db.relationship('Post', secondary=post_tags,
+    #                        backref=db.backref('tag',
+    #                                           lazy='dynamic'))
 
     def __init__(self,*args,**kwargs):
         super(Tag, self).__init__(*args,**kwargs)
@@ -96,7 +98,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
 
-    articles = db.relationship('Post', lazy=True, secondary=authors_join, backref=db.backref('author', lazy='dynamic'))
+   #articles = db.relationship('Post', lazy=True, secondary=authors_join, backref=db.backref('author', lazy='dynamic'))
 
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('user', lazy='dynamic'))
 
