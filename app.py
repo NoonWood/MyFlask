@@ -29,9 +29,6 @@ migrate = Migrate(app,db)
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 #
-
-
-
         #Admin#
 from models import *
 #Перенаправление на регистрацию
@@ -72,7 +69,6 @@ admin.add_view(UserAdminView(User, db.session))
 
 class ExtendedRegisterForm(RegisterForm):
     nickname = StringField('Nickname', [])
-
 
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)

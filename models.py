@@ -37,9 +37,9 @@ authors_join = db.Table('authors_join',
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String(140))
-    slug = db.Column(db.String(140), unique=True)
-    body = db.Column(db.Text)
+    title = db.Column(db.String(140), nullable=False)
+    slug = db.Column(db.String(140), unique=True, nullable=False)
+    body = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     authors = db.relationship('User', secondary=authors_join, lazy='joined',
@@ -65,8 +65,8 @@ class Post(db.Model):
 
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(100))
-    slug = db.Column(db.String(100))
+    name = db.Column(db.String(100), nullable=False)
+    slug = db.Column(db.String(100), nullable=False)
 
     # posts = db.relationship('Post', secondary=post_tags,
     #                        backref=db.backref('tag',
@@ -93,11 +93,10 @@ roles_users = db.Table('roles_users',
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    nickname = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(255))
+    nickname = db.Column(db.String(64), index=True, unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(255),nullable=False)
     active = db.Column(db.Boolean())
-
    #articles = db.relationship('Post', lazy=True, secondary=authors_join, backref=db.backref('author', lazy='dynamic'))
 
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('user', lazy='dynamic'))
@@ -107,7 +106,7 @@ class User(db.Model, UserMixin):
 
 class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=False)
+    name = db.Column(db.String(100), unique=False, nullable=False)
     description = db.Column(db.String(255))
     def __repr__(self):
         return 'Role {0}'.format(self.name)

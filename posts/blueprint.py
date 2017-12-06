@@ -17,7 +17,8 @@ posts = Blueprint('posts', __name__, template_folder='templates')
 @posts.route('/create', methods={'POST', 'GET'})
 @login_required
 def create_post():
-    if request.method == 'POST':
+    form = PostForm(request.form)
+    if request.method == 'POST' and form.validate():
         title = request.form['title']
         body = request.form['body']
         #tags = request.form['tags']
@@ -36,7 +37,6 @@ def create_post():
 
         return redirect(url_for('posts.index'))
 
-    form = PostForm()
     return render_template('posts/create_post.html', form=form)
 
 '''

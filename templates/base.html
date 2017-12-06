@@ -38,11 +38,7 @@
       </li>
 
 
-      <li class="nav-item">
-        <!--<a class="nav-link disabled" href="{ url_for('posts.create_post') }}">Create</a> -->
 
-
-      </li>
         <li class="nav-item">
                   {% if current_user.has_role('author') %}
                       <a class="nav-link disabled" href="{{ url_for('posts.create_post') }}">Create article</a>
@@ -53,6 +49,11 @@
 
                   {% endif %}
         </li>
+        <li class="nav-item">
+        <!--<a class="nav-link disabled" href="{ url_for('posts.create_post') }}">Create</a> -->
+
+        <a class="nav-link disabled" href="/logout">Logout</a>
+       </li>
 
 
     </ul>
